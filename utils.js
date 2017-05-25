@@ -139,10 +139,11 @@ function start(images, fonts, defaultTexts, title, makeContext) {
 	//
 	var btnSetOriginal = document.getElementById('load_default_texts');
 	btnSetOriginal.onclick = function (event) {
-		var yes = confirm('Load default data?');
+		var yes = confirm('Load sample data?');
 		if (yes) {
 			var defaultJson = getDefaultJson(_w, _h, defaultTexts);
 			texts2ui(defaultJson.texts);
+			saveUi();
 		}
 	};
 	//

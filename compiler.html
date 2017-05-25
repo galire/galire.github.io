@@ -135,6 +135,18 @@ function compileHtml(inFile, outFile, tags) {
 						saveTextAsFile(compiledHtml, outFile);
 					}
 				});
+			} else if (url.startsWith('<!--{--><link href=')) {
+				// Replace URL with dataURL in CSS
+				url = url.substring(20, url.length - 27);
+				loadFileHtml(url, function(file, data) {
+					var dataUrl = 'data:,' + encodeURIComponent(data);
+					map[file] = dataUrl;
+					loaded++;
+					if (loaded == arr.length) {
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
+					}
+				});
 			} else {
 				// Replace URL with dataURL in JavaScript
 				url = url.substring(6, url.length - 6);
