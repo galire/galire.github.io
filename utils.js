@@ -134,6 +134,7 @@ function start(images, fonts, defaultTexts, title, makeContext) {
 		});
 	};
 	//
+	alert(0);
 	loadFontsAndImages(fonts, images, function(imgs) {
 		_imgs = imgs;
 		alert(1111111);
