@@ -1,0 +1,253 @@
+<html>
+<!--
+HTML Compiler
+
+Copyright (c) 2017 GALIRE
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Product for personal use and may not be resold or redistributed under any circumstances.
+
+-->
+
+<!--
+
+CORS need to be enabled
+
+Parameters:
+
+in   - Input file name
+out  - Output file name
+tags - Array of tags (in JSON format)
+
+Example:
+file://compiler.html?in=index.htm&out=index.html?tags=red,4
+
+-->
+<head>
+<script>
+'use strict'
+
+start();
+
+function start() {
+	var search = window.location.search;
+	var o = params2vars(search.substring(1));
+
+	var inFile = o['in'];
+	if (inFile === undefined) {
+		alert('Input HTML file required!');
+		return;
+	}
+	var outFile = o['out'];
+	if (outFile === undefined) {
+		alert('Output HTML file required!');
+		return;
+	}
+	var tags = o['tags'];
+	if (tags === undefined)
+		tags = [];
+	else
+		tags = tags.split(',');
+	//
+	compileHtml(inFile, outFile, tags);
+}
+
+function compileHtml(inFile, outFile, tags) {
+	loadFileHtml(inFile, function(file, text) {
+		var n;
+		// Enable tagged lines if tags specified in parameters
+		for (var i = 0; i < tags.length; i++) {
+			var s = '//~' + tags[i] + '~';
+			n = 0;
+			while (true) {
+				var pos = text.indexOf(s, n);
+				if (pos == -1)
+					break;
+				n = pos;
+				text = text.replace(s, '');
+			}
+		}
+		// Remove tagged lines if tags is not specified in parameters
+		n = 0;
+		while (true) {
+			var s = '//~';
+			var pos = text.indexOf(s, n);
+			if (pos == -1)
+				break;
+			n = pos;
+			var pos2 = text.indexOf('\n', n);
+			if (pos2 == -1)
+				pos2 = text.length - 1;
+			text = text.replace(text.substring(pos, pos2 + 1), '');
+		}
+		// Fill array strings for replacing with dataURL in JavaScript
+		var arr = [];
+		n = 0;
+		while (true) {
+			var posS = text.indexOf('/*{*/', n);
+			if (posS == -1)
+				break;
+			n = posS;
+			var posE = text.indexOf('/*}*/', n);
+			if (posE == -1)
+				break;
+			posE += 5;
+			n = posE;
+			var url = text.substring(posS, posE);
+			arr.push(url);
+		}
+		// Fill array strings for replacing with dataURL in HTML
+		n = 0;
+		while (true) {
+			var posS = text.indexOf('<!--{-->', n);
+			if (posS == -1)
+				break;
+			n = posS;
+			var posE = text.indexOf('<!--}-->', n);
+			if (posE == -1)
+				break;
+			posE += 8;
+			n = posE;
+			var url = text.substring(posS, posE);
+			arr.push(url);
+		}
+		//
+		var map = {};
+		var loaded = 0;
+		for (var i = 0; i < arr.length; i++) {
+			var url = arr[i];
+			if (url.startsWith('<!--{--><script src=')) {
+				// Replace URL with dataURL in JavaScript
+				url = url.substring(21, url.length - 19);
+				loadFileHtml(url, function(file, data) {
+					var dataUrl = 'data:,' + encodeURIComponent(data);
+					map[file] = dataUrl;
+					loaded++;
+					if (loaded == arr.length) {
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
+					}
+				});
+			} else {
+				// Replace URL with dataURL in JavaScript
+				url = url.substring(6, url.length - 6);
+				loadFileBinary(url, function(file, data) {
+					var dataUrl = 'data:;base64,' + base64Encode(data);
+					map[file] = dataUrl;
+					loaded++;
+					if (loaded == arr.length) {
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
+					}
+				});
+			}
+		}
+	});
+}
+
+function replaceArray(s, map) {
+	for (var key in map) {
+		if (!map.hasOwnProperty(key))
+			continue;
+		s = s.replace(key, map[key]);
+	}
+	return s;
+}
+
+function base64Encode(str) {
+	const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	var out = "",
+		i = 0,
+		len = str.length,
+		c1, c2, c3;
+	while (i < len) {
+		c1 = str.charCodeAt(i++) & 0xff;
+		if (i == len) {
+			out += CHARS.charAt(c1 >> 2);
+			out += CHARS.charAt((c1 & 0x3) << 4);
+			out += "==";
+			break;
+		}
+		c2 = str.charCodeAt(i++);
+		if (i == len) {
+			out += CHARS.charAt(c1 >> 2);
+			out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+			out += CHARS.charAt((c2 & 0xF) << 2);
+			out += "=";
+			break;
+		}
+		c3 = str.charCodeAt(i++);
+		out += CHARS.charAt(c1 >> 2);
+		out += CHARS.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+		out += CHARS.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+		out += CHARS.charAt(c3 & 0x3F);
+	}
+	return out;
+}
+
+function loadFileBinary(file, callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.overrideMimeType("text/plain; charset=x-user-defined");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			if (callback !== undefined)
+				callback(file, xhr.responseText);
+		}
+	}
+	xhr.open("GET", file, true);
+	xhr.send();
+}
+
+function loadFileHtml(file, callback) {
+	var xhr = new XMLHttpRequest();
+	xhr.overrideMimeType("text/plain; charset=utf-8");
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4) {
+			if (callback !== undefined)
+				callback(file, xhr.responseText);
+		}
+	}
+	xhr.open("GET", file, true);
+	xhr.send();
+}
+
+function saveTextAsFile(textToSave, fileNameToSaveAs) {
+	var textToSaveAsBlob = new Blob([textToSave], {
+		type: 'text/plain',
+	});
+	var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+	var a = document.createElement('a');
+	a.download = fileNameToSaveAs;
+	a.href = textToSaveAsURL;
+	a.onclick = function (event) {
+		document.body.removeChild(event.target);
+	};
+	a.style.display = "none";
+	document.body.appendChild(a);
+	a.click();
+}
+
+function params2vars(search) {
+	var o = {};
+	var params = search.split('&');
+	for (var i = 0; i < params.length; i++) {
+		var arr = params[i].split('=');
+		if (arr.length == 1)
+			continue;
+		var paramName = arr[0];
+		var paramValue = decodeURIComponent(arr[1]);
+		o[paramName] = paramValue;
+	}
+	return o;
+}
+</script>
+
+</head>
+

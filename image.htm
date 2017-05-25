@@ -1,0 +1,135 @@
+<html>
+<!--
+
+Copyright (c) 2017 GALIRE
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Product for personal use and may not be resold or redistributed under any circumstances.
+
+-->
+<style>
+body {
+	font: 14px monospace;
+	margin-top: 30px;
+	margin-left: 20px;
+	margin-right: 20px;
+	padding: 0;
+}
+
+table {
+	width: 100%;
+	max-width: 970px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+input {
+	border: 1px solid #0275D8;
+}
+
+select {
+	border: 1px solid #0275D8;
+	background: #fff;
+}
+
+input, button, select {
+	font: 14px monospace;
+	height: 30px;
+	padding-left: 7px;
+	padding-right: 7px;
+}
+
+.label {
+	padding-left: 7px;
+	background: #ccc;
+	white-space: nowrap;
+}
+
+table td:first-child {
+	max-width: 50px;
+}
+
+input[type='number'] {
+	text-align: right;
+	width: 70px;
+}
+
+select {
+	width: 70px;
+}
+
+/* Hide spinners for Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* Hide spinners for Chrome */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+button {
+	border-radius: 0;
+}
+
+#generate_image {
+	visibility: hidden;
+	float: right;
+	color: White;
+	background: #292B2C;
+	border: none;
+}
+
+#load_default_texts {
+	float: right;
+}
+
+#title {
+	font: bold 14px monospace;
+	width: 100%;
+	height: 40px;
+	padding-left: 7px;
+	background: #0275D8;
+	color: #fff;
+}
+
+
+</style>
+<head>
+<meta charset="UTF-8">
+<!--{--><script src="utils.js"></script><!--}-->
+</head>
+<body>
+	<table id="table">
+	<tr><td colspan="2" id="title"></td></tr>
+	<tr><td><br></td></tr>
+	<tbody id="tbodyTop"></tbody>
+	<tbody id="tbodyBottom">
+	<td colspan="2"><button type="button" id="load_default_texts">Load sample data...</button></td>
+	<tr>
+	<td class="label"><label for="width">Size</label></td><td><input id="width" type="number" min="1" step="1">&nbsp;<strong>✕</strong>&nbsp;<input id="height" type="number" min="1" step="1">&nbsp;<button type="button" id="set_original_size"></button></td>
+	</tr>
+	<tr>
+	<td class="label"><label for="format">Format</label></td><td><select id="format">
+		<option value="png">PNG</option>
+		<option value="jpeg">JPEG</option>
+	</select></td>
+	</tr>
+	<tr><td colspan="2"><hr></td></tr>
+	<tr><td colspan="2"><button type="button" id="generate_image"><strong> Open image in new tab &gt;</strong></button></td></tr>
+	</tbody>
+
+	</table>
+
+</body>
+<!--{--><script src="custom.js"></script><!--}-->
+
