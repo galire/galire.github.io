@@ -31,7 +31,7 @@ textN:   Text data N.
 
 'use strict'
 
-const FF = isFirefoxBrowser();
+var FF = isFirefoxBrowser();
 
 var _imgs;
 var _bgImg;
@@ -281,8 +281,8 @@ function parseParamsString(s) {
 function createUrl(ctx, format, quality) {
 	var canvas = ctx.canvas;
 	//
-	const w = parseInt(canvas.getAttribute('width'));
-	const h = parseInt(canvas.getAttribute('height'));
+	var w = parseInt(canvas.getAttribute('width'));
+	var h = parseInt(canvas.getAttribute('height'));
 	//
 	var contentType;
 	if (format === undefined)
@@ -312,7 +312,7 @@ function createUrl(ctx, format, quality) {
 }
 
 function b64toBlob(b64Data, contentType) {
-	const sliceSize = 512;
+	var sliceSize = 512;
 
 	var byteCharacters = atob(b64Data);
 	var byteArrays = [];
@@ -405,7 +405,7 @@ function loadImages(images, callback ) {
 	};
 	//
 	for (var i = 0; i < keys.length; i++) {
-		const key = keys[i];
+		var key = keys[i];
 		var src = images[key];
 		var img = new Image();
 		imgs[key] = img;
@@ -414,13 +414,13 @@ function loadImages(images, callback ) {
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
 			script.onload = function() {
-			    img.src = _url_;
+				img.src = _url_;
 			};
 			script.src = url;
 			var head = document.querySelector('head');
 			head.appendChild(script);
 		} else
-		    img.src = src;
+			img.src = src;
 	}
 }
 
@@ -521,7 +521,7 @@ function canvasResize(original, canvas, callback) {
 	var nextY = function(y1){
 	  for (var x1 = 0; x1 < w1; x1++) {
 
-	    var
+		var
 
 		// the original pixel is split between two pixels in the output, we do an extra step
 		extraX = false,
@@ -543,33 +543,33 @@ function canvasResize(original, canvas, callback) {
 		offset = (y1 * w1 + x1) * 4,
 		targetOffset = (targetY * w2 + targetX) * 4;
 
-	    // Right side goes into another pixel
-	    if (targetX < Math.floor((x1 + 1) * xScale)) {
+		// Right side goes into another pixel
+		if (targetX < Math.floor((x1 + 1) * xScale)) {
 
 		rightFactor = (((x1 + 1) * xScale) % 1);
 		xFactor -= rightFactor;
 
 		extraX = true;
 
-	    }
+		}
 
-	    // Bottom side goes into another pixel
-	    if (targetY < Math.floor((y1 + 1) * yScale)) {
+		// Bottom side goes into another pixel
+		if (targetY < Math.floor((y1 + 1) * yScale)) {
 
 		bottomFactor = (((y1 + 1) * yScale) % 1);
 		yFactor -= bottomFactor;
 
 		extraY = true;
 
-	    }
+		}
 
-	    var a;
+		var a;
 
-	    a = (data[offset + 3] / 255);
+		a = (data[offset + 3] / 255);
 
-	    var alphaOffset = targetOffset / 4;
+		var alphaOffset = targetOffset / 4;
 
-	    if (extraX) {
+		if (extraX) {
 
 		// Since we're not adding the color of invisible pixels,  we multiply by a
 		data2[targetOffset + 4] += data[offset] * rightFactor * yFactor * a;
@@ -588,9 +588,9 @@ function canvasResize(original, canvas, callback) {
 		// the alpha will be the correct 128, combinging alphas, but we need to preserve the color
 		// of the visible pixels )
 		alphas[alphaOffset + 1] -= (1 - a) * rightFactor * yFactor;
-	    }
+		}
 
-	    if (extraY) {
+		if (extraY) {
 		data2[targetOffset + w2 * 4]     += data[offset] * xFactor * bottomFactor * a;
 		data2[targetOffset + w2 * 4 + 1] += data[offset + 1] * xFactor * bottomFactor * a;
 		data2[targetOffset + w2 * 4 + 2] += data[offset + 2] * xFactor * bottomFactor * a;
@@ -598,9 +598,9 @@ function canvasResize(original, canvas, callback) {
 		data2[targetOffset + w2 * 4 + 3] += data[offset + 3] * xFactor * bottomFactor;
 
 		alphas[alphaOffset + w2] -= (1 - a) * xFactor * bottomFactor;
-	    }
+		}
 
-	    if (extraX && extraY) {
+		if (extraX && extraY) {
 		data2[targetOffset + w2 * 4 + 4]     += data[offset] * rightFactor * bottomFactor * a;
 		data2[targetOffset + w2 * 4 + 5] += data[offset + 1] * rightFactor * bottomFactor * a;
 		data2[targetOffset + w2 * 4 + 6] += data[offset + 2] * rightFactor * bottomFactor * a;
@@ -608,25 +608,25 @@ function canvasResize(original, canvas, callback) {
 		data2[targetOffset + w2 * 4 + 7] += data[offset + 3] * rightFactor * bottomFactor;
 
 		alphas[alphaOffset + w2 + 1] -= (1 - a) * rightFactor * bottomFactor;
-	    }
+		}
 
-	    data2[targetOffset]     += data[offset] * xFactor * yFactor * a;
-	    data2[targetOffset + 1] += data[offset + 1] * xFactor * yFactor * a;
-	    data2[targetOffset + 2] += data[offset + 2] * xFactor * yFactor * a;
+		data2[targetOffset]     += data[offset] * xFactor * yFactor * a;
+		data2[targetOffset + 1] += data[offset + 1] * xFactor * yFactor * a;
+		data2[targetOffset + 2] += data[offset + 2] * xFactor * yFactor * a;
 
-	    data2[targetOffset + 3] += data[offset + 3] * xFactor * yFactor;
+		data2[targetOffset + 3] += data[offset + 3] * xFactor * yFactor;
 
-	    alphas[alphaOffset] -= (1 - a) * xFactor * yFactor;
+		alphas[alphaOffset] -= (1 - a) * xFactor * yFactor;
 	  };
 
 	  if (y1++ < h1) {
-	    // Big images shouldn't block for a long time.
-	    // This breaks up the process and allows other processes to tick
-	    setTimeout(function(){
+		// Big images shouldn't block for a long time.
+		// This breaks up the process and allows other processes to tick
+		setTimeout(function(){
 		nextY(y1)
-	    }, 0);
+		}, 0);
 	  } else
-	    done();
+		done();
 
 	};
 
@@ -635,16 +635,16 @@ function canvasResize(original, canvas, callback) {
 	  // fully distribute the color of pixels that are partially full because their neighbor is transparent
 	  // (i.e. undo the invisible pixels are averaged with visible ones)
 	  for (var i = 0; i < (_data2.length >> 2); i++){
-	    if (alphas[i] && alphas[i] < 1) {
+		if (alphas[i] && alphas[i] < 1) {
 		data2[(i<<2)] /= alphas[i];     // r
 		data2[(i<<2) + 1] /= alphas[i]; // g
 		data2[(i<<2) + 2] /= alphas[i]; // b
-	    }
+		}
 	  }
 
 	  // re populate the actual imgData
 	  for (var i = 0; i < data2.length; i++){
-	    _data2[i] = Math.round(data2[i]);
+		_data2[i] = Math.round(data2[i]);
 	  }
 
 	  var context = canvas.getContext("2d")
@@ -661,13 +661,13 @@ function canvasResize(original, canvas, callback) {
  * http://stackoverflow.com/questions/5560248/programmatically-lighten-or-darken-a-hex-color-or-rgb-and-blend-colors
  */
 function shadeBlend(p,c0,c1) {
-    var n=p<0?p*-1:p,u=Math.round,w=parseInt;
-    if(c0.length>7){
-        var f=c0.split(","),t=(c1?c1:p<0?"rgb(0,0,0)":"rgb(255,255,255)").split(","),R=w(f[0].slice(4)),G=w(f[1]),B=w(f[2]);
-        return "rgb("+(u((w(t[0].slice(4))-R)*n)+R)+","+(u((w(t[1])-G)*n)+G)+","+(u((w(t[2])-B)*n)+B)+")"
-    }else{
-        var f=w(c0.slice(1),16),t=w((c1?c1:p<0?"#000000":"#FFFFFF").slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF;
-        return "#"+(0x1000000+(u(((t>>16)-R1)*n)+R1)*0x10000+(u(((t>>8&0x00FF)-G1)*n)+G1)*0x100+(u(((t&0x0000FF)-B1)*n)+B1)).toString(16).slice(1)
-    }
+	var n=p<0?p*-1:p,u=Math.round,w=parseInt;
+	if(c0.length>7){
+		var f=c0.split(","),t=(c1?c1:p<0?"rgb(0,0,0)":"rgb(255,255,255)").split(","),R=w(f[0].slice(4)),G=w(f[1]),B=w(f[2]);
+		return "rgb("+(u((w(t[0].slice(4))-R)*n)+R)+","+(u((w(t[1])-G)*n)+G)+","+(u((w(t[2])-B)*n)+B)+")"
+	}else{
+		var f=w(c0.slice(1),16),t=w((c1?c1:p<0?"#000000":"#FFFFFF").slice(1),16),R1=f>>16,G1=f>>8&0x00FF,B1=f&0x0000FF;
+		return "#"+(0x1000000+(u(((t>>16)-R1)*n)+R1)*0x10000+(u(((t>>8&0x00FF)-G1)*n)+G1)*0x100+(u(((t&0x0000FF)-B1)*n)+B1)).toString(16).slice(1)
+	}
 }
 
