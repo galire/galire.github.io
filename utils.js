@@ -136,7 +136,10 @@ function start(images, fonts, defaultTexts, title, makeContext) {
 	//
 	loadFontsAndImages(fonts, images, function(imgs) {
 		_imgs = imgs;
+		alert(1111111);
 		var firstKey = Object.getOwnPropertyNames(images)[0];
+		alert(2222222);
+
 		_bgImg = imgs[firstKey];
 		_w = _bgImg.naturalWidth;
 		_h = _bgImg.naturalHeight;
