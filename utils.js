@@ -134,8 +134,6 @@ function start(images, fonts, defaultTexts, title, makeContext) {
 		});
 	};
 	//
-	alert(0);
-	console.log(0);
 	loadFontsAndImages(fonts, images, function(imgs) {
 		console.log(111111);
 		_imgs = imgs;
@@ -438,7 +436,9 @@ function loadFonts(fonts, callback) {
 		return;
 	}
 	//
+	alert('XXXXXXXXXXXXX');
 	document.fonts.onloadingdone = callback;
+	alert('ZZZZZZZZZZ');
 	//
 	var style = document.createElement('style');
 	for (var key in fonts) {
