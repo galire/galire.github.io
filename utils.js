@@ -160,13 +160,8 @@ function start(images, fonts, defaultTexts, title, makeContext) {
 	};
 	//
 	loadFontsAndImages(fonts, images, function(imgs) {
-		console.log(111111);
 		_imgs = imgs;
-		alert(1111111);
 		var firstKey = Object.getOwnPropertyNames(images)[0];
-		console.log(222222);
-		alert(2222222);
-
 		_bgImg = imgs[firstKey];
 		_w = _bgImg.naturalWidth;
 		_h = _bgImg.naturalHeight;
@@ -477,15 +472,12 @@ function loadFonts(fonts, callback) {
 		//
 		var ff = el.style.fontFamily;
 		//
-		alert('zzzzzzzzzzzzzz00');
-
 		if (ff.startsWith('"') || ff.startsWith("'"))
 			ff = ff.substring(1, ff.length - 1);
 		if (url === undefined) {
 			console.log("Unknown Font Family: '" + ff + "'");
 			continue;
 		}
-				alert('zzzzzzzzzzzzzz11');
 		var format;
 		if (url.endsWith('.ttf'))
 			format = 'truetype';
@@ -496,8 +488,6 @@ function loadFonts(fonts, callback) {
 		else if (url.endsWith('.otf'))
 			format = 'opentype';
 		//
-				alert('zzzzzzzzzzzzzz222');
-
 		var css = "@font-face {font-family: '" + ff + "'; src: url('" +  url + "'); format('" + format + "');}";
 		style.textContent += css;
 	}
