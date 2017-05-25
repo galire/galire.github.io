@@ -135,10 +135,13 @@ function start(images, fonts, defaultTexts, title, makeContext) {
 	};
 	//
 	alert(0);
+	console.log(0);
 	loadFontsAndImages(fonts, images, function(imgs) {
+		console.log(111111);
 		_imgs = imgs;
 		alert(1111111);
 		var firstKey = Object.getOwnPropertyNames(images)[0];
+		console.log(222222);
 		alert(2222222);
 
 		_bgImg = imgs[firstKey];
