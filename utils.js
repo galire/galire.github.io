@@ -38,7 +38,7 @@ var _bgImg;
 var _h, _w;
 var _disableWidthHeightListeners = false;
 //
-function start(images, fonts, defaultTexts, title) {
+function start(images, fonts, defaultTexts, title, makeContext) {
 	document.title = title;
 	var titleHeader = document.getElementById('title');
 	titleHeader.innerText = title;

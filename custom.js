@@ -23,7 +23,7 @@ var gcolor = '#4192BD'; // M
 //
 //
 var title = 'Baby Shower Invitation';
-start(images, fonts, getDefaultTexts(), title);
+start(images, fonts, getDefaultTexts(), title, makeContext);
 //
 function getDefaultTexts() {
 	var arr = [];
