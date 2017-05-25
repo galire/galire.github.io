@@ -393,7 +393,6 @@ function drawText(ctx, text, kerning, stroke, fill) {
 
 function loadFontsAndImages(fonts, images, callback) {
 	loadFonts(fonts, function(event) {
-		alert('zzzzzzzzzzzzzz');
 		loadImages(images, function(imgs) {
 			callback(imgs);
 		});
@@ -453,12 +452,15 @@ function loadFonts(fonts, callback) {
 		//
 		var ff = el.style.fontFamily;
 		//
+		alert('zzzzzzzzzzzzzz00');
+
 		if (ff.startsWith('"') || ff.startsWith("'"))
 			ff = ff.substring(1, ff.length - 1);
 		if (url === undefined) {
 			console.log("Unknown Font Family: '" + ff + "'");
 			continue;
 		}
+				alert('zzzzzzzzzzzzzz11');
 		var format;
 		if (url.endsWith('.ttf'))
 			format = 'truetype';
@@ -469,6 +471,8 @@ function loadFonts(fonts, callback) {
 		else if (url.endsWith('.otf'))
 			format = 'opentype';
 		//
+				alert('zzzzzzzzzzzzzz222');
+
 		var css = "@font-face {font-family: '" + ff + "'; src: url('" +  url + "'); format('" + format + "');}";
 		style.textContent += css;
 	}
