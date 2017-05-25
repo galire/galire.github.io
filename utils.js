@@ -393,8 +393,8 @@ function drawText(ctx, text, kerning, stroke, fill) {
 
 function loadFontsAndImages(fonts, images, callback) {
 	loadFonts(fonts, function(event) {
+		alert('zzzzzzzzzzzzzz');
 		loadImages(images, function(imgs) {
-			alert('zzzzzzzzzzzzzz');
 			callback(imgs);
 		});
 	});
