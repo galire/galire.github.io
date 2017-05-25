@@ -90,7 +90,7 @@ function start(images, fonts, defaultTexts, title) {
 	};
 	//
 	var table = document.getElementById('tbodyTop');
-	var textsCount = getDefaultTexts().length;
+	var textsCount = defaultTexts.length;
 	for (var i = 0; i < textsCount; i++) {
 		var tr = document.createElement('tr');
 		tr.innerHTML = '<td class="label"><label for="text.' + i + '">Text ' + (i + 1) +'</label></td><td><input id="text.' + i + '" type="text" style="width:100%"></td>';
