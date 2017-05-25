@@ -394,6 +394,7 @@ function drawText(ctx, text, kerning, stroke, fill) {
 function loadFontsAndImages(fonts, images, callback) {
 	loadFonts(fonts, function(event) {
 		loadImages(images, function(imgs) {
+			alert('zzzzzzzzzzzzzz');
 			callback(imgs);
 		});
 	});
@@ -436,9 +437,7 @@ function loadFonts(fonts, callback) {
 		return;
 	}
 	//
-	alert('XXXXXXXXXXXXX');
 	document.fonts.onloadingdone = callback;
-	alert('ZZZZZZZZZZ');
 	//
 	var style = document.createElement('style');
 	for (var key in fonts) {
