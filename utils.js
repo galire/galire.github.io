@@ -601,7 +601,9 @@ function loadFonts(fonts, callback) {
 	var head = document.querySelector('head');
 	head.appendChild(style);
 	if (!callbackCalled)
-		callback();
+		setTimeout(function(){
+			callback();
+		}, 1000);
 }
 
 /* ----------------------------------------------------------------- */
