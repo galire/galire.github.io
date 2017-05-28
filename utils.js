@@ -558,7 +558,12 @@ function loadFonts(fonts, callback) {
 		return;
 	}
 	//
-	document.fonts.onloadingdone = callback;
+	var callbackCalled;
+	if (document.fonts != null && document.fonts != undefined) {
+		document.fonts.onloadingdone = callback;
+		callbackCalled = true;
+	} else
+		callbackCalled = false;
 	//
 	var style = document.createElement('style');
 	for (var key in fonts) {
@@ -595,6 +600,8 @@ function loadFonts(fonts, callback) {
 	}
 	var head = document.querySelector('head');
 	head.appendChild(style);
+	if (!callbackCalled)
+		callback();
 }
 
 /* ----------------------------------------------------------------- */
