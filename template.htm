@@ -23,15 +23,12 @@ Product for personal use and may not be resold or redistributed under any circum
 	<!--{--><link href="style.css" rel="stylesheet"><!--}-->
 </head>
 <body>
-	<a id="download_link" hidden></a>
 	<table id="table">
-	<tr><td><br></td></tr>
-	<tr><td colspan="2"><div id="preview" title="Open image in new tab"></div></td></tr>
-	<tr><td colspan="2"><button type="button" id="generate_image" style="margin-top: 5px;" disabled>⟲ Update Preview</button></td></tr>
+	<tr><td colspan="2" id="title"></td></tr>
 	<tr><td><br></td></tr>
 	<tbody id="tbodyTop"></tbody>
 	<tbody id="tbodyBottom">
-	<td colspan="2"><button type="button" id="load_default_texts" disabled>⬑ Load sample data...</button></td>
+	<td colspan="2"><button type="button" id="load_default_texts">Load sample data...</button></td>
 	<tr>
 	<td class="label"><label for="width">Size</label></td><td><input id="width" type="number" min="1" step="1">&nbsp;<strong>✕</strong>&nbsp;<input id="height" type="number" min="1" step="1">&nbsp;<button type="button" id="set_original_size"></button></td>
 	</tr>
@@ -39,26 +36,65 @@ Product for personal use and may not be resold or redistributed under any circum
 	<td class="label"><label for="format">Format</label></td><td><select id="format">
 		<option value="png">PNG</option>
 		<option value="jpeg">JPEG</option>
-	</select>
-	<button type="button" id="download_image" class="enabled_button"><strong>▼ DOWNLOAD IMAGE</strong></button>
-	</td>
+	</select></td>
 	</tr>
+	<tr><td colspan="2"><hr></td></tr>
+	<tr><td colspan="2"><button type="button" id="generate_image"><strong> Open image in new tab &gt;</strong></button></td></tr>
 	</tbody>
+
 	</table>
 </body>
 <!-- ---------------------------------------------------[ HEADER END   ]--------------------------------------------------- -->
-<!--{--><script src="custom.js"></script><!--}-->
+
 <script>
+'use strict'
 
-/*
-images      - images object (name -> URL)
-fonts       - fonts object (family -> URL)
-sampleTexts - sample texts array
-title       - title
-makeContext - function(imgs, bgImg, o)
-*/
+function getDefaultTexts() {
+	//
+	var arr = [];
+	arr.push('Text 1');
+	arr.push('Text 2');
+	arr.push('Text 3');
+	//
+	return arr;
+}
 
-start(images, fonts, bgImageName, sampleTexts, title, makeContext);
+function makeContext(imgs, bgImg, o) {
+	var w = bgImg.naturalWidth;
+	var h = bgImg.naturalHeight;
+
+	var ctx = createContext(w, h);
+	//
+	//
+	ctx.drawImage(bgImg, 0, 0);
+	//
+	ctx.save();
+	ctx.restore();
+	//
+	return ctx;
+}
+
+var fonts = {
+	"MyFontFamily":    /*{*/"fonts/myfont.ttf"/*}*/,
+};
+
+var images = {
+/*!*/	"image01": /*{*/"images/MyImage1.jpg"/*}*/,
+//~01~	"image01": /*{*/"images/MyImage1.jpg"/*}*/,
+//~02~	"image02": /*{*/"images/MyImage2.jpg"/*}*/,
+//~03~	"image03": /*{*/"images/MyImage2.jpg"/*}*/,
+};
+
+//~M~var gender = 'Male';
+//~F~var gender = 'Female';
+//~N~var gender = 'Unknown';
+/*!*/var gender = 'Male';
+//
+//
+//
+var title = 'My Title';
+
+start(images, fonts, getDefaultTexts(), title, makeContext);
+
 </script>
-
 

@@ -56,14 +56,10 @@ function start() {
 	else
 		tags = tags.split(',');
 	//
-	includeJsAndCSS(inFile, tags, function(compiledSourceI) {
-		includeBin(compiledSourceI, function(compiledSourceII) {
-			saveTextAsFile(compiledSourceII, outFile);
-		});
-	});
+	compileHtml(inFile, outFile, tags);
 }
 
-function preprocessText(text, tags) {
+function preprocessText(text, arr, tags) {
 	var n;
 	// Enable tagged lines if tags specified in parameters
 	for (var i = 0; i < tags.length; i++) {
@@ -103,14 +99,6 @@ function preprocessText(text, tags) {
 			pos2 = text.length - 1;
 		text = text.replace(text.substring(pos, pos2 + 1), '');
 	}
-	//
-	return text;
-}
-
-function fillArray(text) {
-	var arr = [];
-	var n;
-	//
 	// Fill array strings for replacing with dataURL in JavaScript
 	n = 0;
 	while (true) {
@@ -126,7 +114,6 @@ function fillArray(text) {
 		var url = text.substring(posS, posE);
 		arr.push(url);
 	}
-	//
 	// Fill array strings for replacing with dataURL in HTML
 	n = 0;
 	while (true) {
@@ -143,67 +130,58 @@ function fillArray(text) {
 		arr.push(url);
 	}
 	//
-	return arr;
+	return text;
 }
 
-function includeJsAndCSS(inFile, tags, callback) {
+function compileHtml(inFile, outFile, tags) {
 	loadFileHtml(inFile, function(file, text) {
 		//
-		text = preprocessText(text, tags);
-		var arr = fillArray(text);
+		var arr = [];
+		text = preprocessText(text, arr, tags);
 		//
 		var map = {};
 		var loaded = 0;
 		for (var i = 0; i < arr.length; i++) {
-			var rep = arr[i];
-			if (rep.startsWith('<!--{--><script src=')) {
+			var url = arr[i];
+			if (url.startsWith('<!--{--><script src=')) {
 				// Replace URL with dataURL in JavaScript
-				var url = rep.substring(21, rep.length - 19);
+				url = url.substring(21, url.length - 19);
 				loadFileHtml(url, function(file, data) {
-					data = preprocessText(data, tags);
-					var rep = arr[loaded];
-					map[rep] = '<script>' + data + '</' + 'script>';
+					var dataUrl = 'data:,' + encodeURIComponent(data);
+					map[file] = dataUrl;
 					loaded++;
 					if (loaded == arr.length) {
-						var compiledSourceI = replaceArray(text, map);
-						callback(compiledSourceI);
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
 					}
 				});
-			} else if (rep.startsWith('<!--{--><link href=')) {
+			} else if (url.startsWith('<!--{--><link href=')) {
 				// Replace URL with dataURL in CSS
-				var url = rep.substring(20, rep.length - 27);
+				url = url.substring(20, url.length - 27);
 				loadFileHtml(url, function(file, data) {
-					var rep = arr[loaded];
-					map[rep] = '<style>' + data + '</' + 'style>';
+					var dataUrl = 'data:,' + encodeURIComponent(data);
+					map[file] = dataUrl;
 					loaded++;
 					if (loaded == arr.length) {
-						var compiledSourceI = replaceArray(text, map);
-						callback(compiledSourceI);
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
+					}
+				});
+			} else {
+				// Replace URL with dataURL in JavaScript
+				url = url.substring(6, url.length - 6);
+				loadFileBinary(url, function(file, data) {
+					var dataUrl = 'data:;base64,' + base64Encode(data);
+					map[file] = dataUrl;
+					loaded++;
+					if (loaded == arr.length) {
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
 					}
 				});
 			}
 		}
 	});
-}
-
-function includeBin(compiledSourceI, callback) {
-	var arr = fillArray(compiledSourceI);
-	var map = {};
-	var loaded = 0;
-	for (var i = 0; i < arr.length; i++) {
-		var rep = arr[i];
-		// Replace URL with dataURL in JavaScript
-		var url = rep.substring(6, rep.length - 6);
-		loadFileBinary(url, function(file, data) {
-			var dataUrl = 'data:;base64,' + base64Encode(data);
-			map[file] = dataUrl;
-			loaded++;
-			if (loaded == arr.length) {
-				var compiledSourceII = replaceArray(compiledSourceI, map);
-				callback(compiledSourceII);
-			}
-		});
-	}
 }
 
 function replaceArray(s, map) {

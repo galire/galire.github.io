@@ -220,7 +220,7 @@ function start(images, fonts, bgImageName, defaultTexts, title, makeContext) {
 		inputNumberHeight.value = _h;
 		_disableWidthHeightListeners = false;
 		//
-		btnSetOriginalSize.innerHTML = '← Set original (' + _w + ' ✕ ' + _h + ')';
+		btnSetOriginalSize.innerHTML = '⤺ Set original (' + _w + ' ✕ ' + _h + ')';
 		//
 		updatePreview();
 

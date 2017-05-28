@@ -59,65 +59,85 @@ function start() {
 	compileHtml(inFile, outFile, tags);
 }
 
-function compileHtml(inFile, outFile, tags) {
-	loadFileHtml(inFile, function(file, text) {
-		var n;
-		// Enable tagged lines if tags specified in parameters
-		for (var i = 0; i < tags.length; i++) {
-			var s = '//~' + tags[i] + '~';
-			n = 0;
-			while (true) {
-				var pos = text.indexOf(s, n);
-				if (pos == -1)
-					break;
-				n = pos;
-				text = text.replace(s, '');
-			}
-		}
-		// Remove tagged lines if tags is not specified in parameters
+function preprocessText(text, arr, tags) {
+	var n;
+	// Enable tagged lines if tags specified in parameters
+	for (var i = 0; i < tags.length; i++) {
+		var s = '//~' + tags[i] + '~';
 		n = 0;
 		while (true) {
-			var s = '//~';
 			var pos = text.indexOf(s, n);
 			if (pos == -1)
 				break;
 			n = pos;
-			var pos2 = text.indexOf('\n', n);
-			if (pos2 == -1)
-				pos2 = text.length - 1;
-			text = text.replace(text.substring(pos, pos2 + 1), '');
+			text = text.replace(s, '');
 		}
-		// Fill array strings for replacing with dataURL in JavaScript
+	}
+	// Remove lines which disabled in compile time
+	n = 0;
+	var prefix = '/*!*/';
+	while (true) {
+		var pos = text.indexOf(prefix, n);
+		if (pos == -1)
+			break;
+		n = pos;
+		var pos2 = text.indexOf('\n', n);
+		if (pos2 == -1)
+			pos2 = text.length - 1;
+		text = text.replace(text.substring(pos, pos2 + 1), '');
+	}
+	// Remove tagged lines if tags is not specified in parameters
+	n = 0;
+	prefix = '//~';
+	while (true) {
+		var pos = text.indexOf(prefix, n);
+		if (pos == -1)
+			break;
+		n = pos;
+		var pos2 = text.indexOf('\n', n);
+		if (pos2 == -1)
+			pos2 = text.length - 1;
+		text = text.replace(text.substring(pos, pos2 + 1), '');
+	}
+	// Fill array strings for replacing with dataURL in JavaScript
+	n = 0;
+	while (true) {
+		var posS = text.indexOf('/*{*/', n);
+		if (posS == -1)
+			break;
+		n = posS;
+		var posE = text.indexOf('/*}*/', n);
+		if (posE == -1)
+			break;
+		posE += 5;
+		n = posE;
+		var url = text.substring(posS, posE);
+		arr.push(url);
+	}
+	// Fill array strings for replacing with dataURL in HTML
+	n = 0;
+	while (true) {
+		var posS = text.indexOf('<!--{-->', n);
+		if (posS == -1)
+			break;
+		n = posS;
+		var posE = text.indexOf('<!--}-->', n);
+		if (posE == -1)
+			break;
+		posE += 8;
+		n = posE;
+		var url = text.substring(posS, posE);
+		arr.push(url);
+	}
+	//
+	return text;
+}
+
+function compileHtml(inFile, outFile, tags) {
+	loadFileHtml(inFile, function(file, text) {
+		//
 		var arr = [];
-		n = 0;
-		while (true) {
-			var posS = text.indexOf('/*{*/', n);
-			if (posS == -1)
-				break;
-			n = posS;
-			var posE = text.indexOf('/*}*/', n);
-			if (posE == -1)
-				break;
-			posE += 5;
-			n = posE;
-			var url = text.substring(posS, posE);
-			arr.push(url);
-		}
-		// Fill array strings for replacing with dataURL in HTML
-		n = 0;
-		while (true) {
-			var posS = text.indexOf('<!--{-->', n);
-			if (posS == -1)
-				break;
-			n = posS;
-			var posE = text.indexOf('<!--}-->', n);
-			if (posE == -1)
-				break;
-			posE += 8;
-			n = posE;
-			var url = text.substring(posS, posE);
-			arr.push(url);
-		}
+		text = preprocessText(text, arr, tags);
 		//
 		var map = {};
 		var loaded = 0;
@@ -126,6 +146,18 @@ function compileHtml(inFile, outFile, tags) {
 			if (url.startsWith('<!--{--><script src=')) {
 				// Replace URL with dataURL in JavaScript
 				url = url.substring(21, url.length - 19);
+				loadFileHtml(url, function(file, data) {
+					var dataUrl = 'data:,' + encodeURIComponent(data);
+					map[file] = dataUrl;
+					loaded++;
+					if (loaded == arr.length) {
+						var compiledHtml = replaceArray(text, map);
+						saveTextAsFile(compiledHtml, outFile);
+					}
+				});
+			} else if (url.startsWith('<!--{--><link href=')) {
+				// Replace URL with dataURL in CSS
+				url = url.substring(20, url.length - 27);
 				loadFileHtml(url, function(file, data) {
 					var dataUrl = 'data:,' + encodeURIComponent(data);
 					map[file] = dataUrl;

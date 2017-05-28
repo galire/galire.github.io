@@ -40,7 +40,7 @@ Product for personal use and may not be resold or redistributed under any circum
 		<option value="png">PNG</option>
 		<option value="jpeg">JPEG</option>
 	</select>
-	<button type="button" id="download_image" class="enabled_button"><strong>▼ DOWNLOAD IMAGE</strong></button>
+	<button type="button" id="download_image" class="enabled_button"><strong>⬇ DOWNLOAD IMAGE</strong></button>
 	</td>
 	</tr>
 	</tbody>

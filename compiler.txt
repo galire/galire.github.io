@@ -1,0 +1,20 @@
+HTML context
+============
+
+Include JavaScript:
+/*{*/    Start URL string
+<!--{--> Start JavaScript or CSS
+<!--}--> End JavaScript or CSS
+
+Examples:
+<!--{--><script src="utils.js"></script><!--}-->
+<!--{--><link href="style.css" rel="stylesheet"><!--}-->
+
+
+JavaScript context
+==================
+
+/*!*/      Ignore line
+//~MyTag~  Tagged line (tag name is 'MyTag')
+/*{*/      Start URL string
+/*}*/      End  URL string

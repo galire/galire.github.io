@@ -1,42 +1,7 @@
 'use strict'
 
-var fonts = {
-	"MODES":    /*{*/"fonts/MODES___.TTF"/*}*/,
-	"stamper":  /*{*/"fonts/old_stamper.ttf"/*}*/,
-	"Starjedi": /*{*/"fonts/Starjedi.ttf"/*}*/,
-	"SCRIPTIN": /*{*/"fonts/SCRIPTIN.ttf"/*}*/,
-};
-
-var images = {
-"image01": /*{*/"images/MaxPixel.freegreatpicture.com-Egg-Hatch-Lego-Batman-Hatched-Begin-Beginning-1367730.jpg"/*}*/,
-//~01~	"image01": /*{*/"images/MaxPixel.freegreatpicture.com-Egg-Hatch-Lego-Batman-Hatched-Begin-Beginning-1367730.jpg"/*}*/,
-//~02~	"image02": /*{*/"images/MaxPixel.freegreatpicture.com-Hatch-Egg-Lego-Begin-Hatched-Superman-Beginning-1367737.jpg"/*}*/,
-//~03~	"image03": /*{*/"images/MaxPixel.freegreatpicture.com-Lego-Hatched-Stormtrooper-Hatch-Begin-Egg-1367777.jpg"/*}*/,
-//~04~	"image04": /*{*/"images/MaxPixel.freegreatpicture.com-Storm-Trooper-Egg-Lego-Stormtrooper-Balance-1351022M.jpg"/*}*/,
-};
-
-var gcolor = '#4192BD'; // M
-//~M~var gcolor = '#4192BD'; // M
-//~F~var gcolor = '#FD4B9D'; // F
-//~N~var gcolor = '#FFFFFF'; // N
-//
-//
-//
-var title = 'Baby Shower Invitation1';
-start(images, fonts, getDefaultTexts(), title, makeContext);
-//
-function getDefaultTexts() {
-	var arr = [];
-	arr.push('Baby Shower');
-	arr.push('Amelia Smythe');
-	arr.push('123 Main Street');
-	arr.push('Anytown, CA');
-	arr.push('RSVP by April 15. Phone: 563-162-4591');
-	arr.push('Sat Apr 25 2:00 PM');
-	return arr;
-}
-
-function makeContext(imgs, bgImg, o) {
+function makeContext(imgs, o) {
+	var bgImg = document.images[bgImageName];
 	var w = bgImg.naturalWidth;
 	var h = bgImg.naturalHeight;
 
@@ -183,3 +148,36 @@ function makeContext(imgs, bgImg, o) {
 	return ctx;
 }
 
+var fonts = {
+	"MODES":    /*{*/"fonts/MODES___.TTF"/*}*/,
+	"stamper":  /*{*/"fonts/old_stamper.ttf"/*}*/,
+	"Starjedi": /*{*/"fonts/Starjedi.ttf"/*}*/,
+	"SCRIPTIN": /*{*/"fonts/SCRIPTIN.ttf"/*}*/,
+};
+
+var images = {
+/*!*/	"image01": /*{*/"images/MaxPixel.freegreatpicture.com-Egg-Hatch-Lego-Batman-Hatched-Begin-Beginning-1367730.jpg"/*}*/,
+//~01~	"image01": /*{*/"images/MaxPixel.freegreatpicture.com-Egg-Hatch-Lego-Batman-Hatched-Begin-Beginning-1367730.jpg"/*}*/,
+//~02~	"image02": /*{*/"images/MaxPixel.freegreatpicture.com-Hatch-Egg-Lego-Begin-Hatched-Superman-Beginning-1367737.jpg"/*}*/,
+//~03~	"image03": /*{*/"images/MaxPixel.freegreatpicture.com-Lego-Hatched-Stormtrooper-Hatch-Begin-Egg-1367777.jpg"/*}*/,
+//~04~	"image04": /*{*/"images/MaxPixel.freegreatpicture.com-Storm-Trooper-Egg-Lego-Stormtrooper-Balance-1351022M.jpg"/*}*/,
+};
+
+//~M~var gcolor = '#4192BD'; // M
+//~F~var gcolor = '#FD4B9D'; // F
+//~N~var gcolor = '#FFFFFF'; // N
+/*!*/var gcolor = '#4192BD'; // M
+//
+//
+//
+var title = 'Baby Shower Invitation';
+
+var sampleTexts = [];
+sampleTexts.push('Baby Shower');
+sampleTexts.push('Amelia Smythe');
+sampleTexts.push('123 Main Street');
+sampleTexts.push('Anytown, CA');
+sampleTexts.push('RSVP by April 15. Phone: 563-162-4591');
+sampleTexts.push('Sat Apr 25 2:00 PM');
+//
+var bgImageName = "image01";

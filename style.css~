@@ -32,7 +32,7 @@ input, button, select {
 
 .label {
 	padding-left: 7px;
-	background: #ddd;
+	background: #eee;
 	white-space: nowrap;
 }
 
