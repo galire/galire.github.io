@@ -44,11 +44,6 @@ var _previewJsonStr;
 
 //
 function start(images, fonts, bgImageName, defaultTexts, title, makeContext) {
-	if (window['localStorage'] === undefined || window['localStorage'] === null)
-		var localStorage = {};
-	if (window['sessionStorage'] === undefined || window['sessionStorage'] === null)
-		var sessionStorage = {};
-	//
 	var body = document.body;
 	//
 	document.title = title;
