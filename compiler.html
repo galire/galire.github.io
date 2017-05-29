@@ -156,9 +156,9 @@ function includeJsAndCSS(inFile, tags, callback) {
 		var loaded = 0;
 		for (var i = 0; i < arr.length; i++) {
 			var rep = arr[i];
-			if (rep.startsWith('<!--{--><script src=')) {
+			if (rep.startsWith('<!--{--><script src="')) {
 				// Replace URL with dataURL in JavaScript
-				var url = rep.substring(21, rep.length - 19);
+				var url = rep.substring('<!--{--><script src="'.length, rep.length - ('"></' + 'script><!--}-->').length);
 				loadFileHtml(url, function(file, data) {
 					data = preprocessText(data, tags);
 					var rep = arr[loaded];
@@ -169,12 +169,12 @@ function includeJsAndCSS(inFile, tags, callback) {
 						callback(compiledSourceI);
 					}
 				});
-			} else if (rep.startsWith('<!--{--><link href=')) {
+			} else if (rep.startsWith('<!--{--><link href="')) {
 				// Replace URL with dataURL in CSS
-				var url = rep.substring(20, rep.length - 27);
+				var url = rep.substring('<!--{--><link href="'.length, rep.length - '" rel="stylesheet" type="text/css"><!--}-->'.length);
 				loadFileHtml(url, function(file, data) {
 					var rep = arr[loaded];
-					map[rep] = '<style>' + data + '</' + 'style>';
+					map[rep] = '<style type="text/css">' + data + '</' + 'style>';
 					loaded++;
 					if (loaded == arr.length) {
 						var compiledSourceI = replaceArray(text, map);

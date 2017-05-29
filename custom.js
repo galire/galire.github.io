@@ -7,6 +7,8 @@ function makeContext(o) {
 
 	var ctx = createContext(w, h);
 	//
+//	if (true)
+//		return ctx;
 	//
 	ctx.drawImage(bgImg, 0, 0);
 	//
@@ -170,7 +172,8 @@ var images = {
 //
 //
 //
-var title = 'Baby Shower Invitation';
+//var title = 'Baby Shower Invitation';
+var title = '';
 
 var sampleTexts = [];
 sampleTexts.push('Baby Shower');

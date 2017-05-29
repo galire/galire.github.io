@@ -1,9 +1,9 @@
-body {
-	font: 14px monospace;
-	margin-top: 0;
-	margin-left: 20px;
-	margin-right: 20px;
+html, body {
+	height: 100%;
+	margin: 0;
 	padding: 0;
+	Xfont: 14px monospace;
+	font: 14px Roboto;
 }
 
 #table {
@@ -24,15 +24,20 @@ select {
 }
 
 input, button, select {
-	font: 14px monospace;
+	Xfont: 14px monospace;
+	font: 14px Roboto;
 	height: 30px;
 	padding-left: 7px;
 	padding-right: 7px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 
 .label {
 	padding-left: 7px;
 	background: #ddd;
+	border: 1px solid #aaa;
 	white-space: nowrap;
 }
 
@@ -63,7 +68,12 @@ input[type=number]::-webkit-inner-spin-button {
 
 button {
 	cursor: pointer;
+	border: 1px solid #aaa;
 	border-radius: 0;
+}
+
+button:disabled {
+	cursor: default;
 }
 
 #generate_image, #download_image {
@@ -86,4 +96,15 @@ button {
 	background-repeat: no-repeat;
 	background-size: cover;
 	box-shadow: 0 0 25px rgba(0, 0, 0, 1);
+}
+
+input[id='saveSettingsCheckbox'] {
+	position: relative;
+	vertical-align: middle;
+}
+
+.separator {
+	width: 100%;
+	margin-top: 5px;
+	border-bottom: 1px solid #292B2C;
 }

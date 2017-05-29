@@ -1,5 +1,5 @@
+<!DOCTYPE html>
 <html>
-<!-- ---------------------------------------------------[ HEADER START ]--------------------------------------------------- -->
 <!--
 
 Copyright (c) 2017 GALIRE
@@ -19,19 +19,24 @@ Product for personal use and may not be resold or redistributed under any circum
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Loading...</title>
 	<!--{--><script src="utils.js"></script><!--}-->
-	<!--{--><link href="style.css" rel="stylesheet"><!--}-->
+	<!--{--><script src="common.js"></script><!--}-->
+	<!--{--><script src="custom.js"></script><!--}-->
+	<!--{--><link href="style.css" rel="stylesheet" type="text/css"><!--}-->
 </head>
 <body>
 	<a id="download_link" hidden></a>
 	<table id="table">
-	<tr><td><br></td></tr>
+	<tr><td colspan="2"><br></td></tr>
 	<tr><td colspan="2"><div id="preview" title="Open image in new tab"></div></td></tr>
 	<tr><td colspan="2"><button type="button" id="generate_image" style="margin-top: 5px;" disabled>⟲ Update Preview</button></td></tr>
-	<tr><td><br></td></tr>
+	<tr><td colspan="2"><br></td></tr>
 	<tbody id="tbodyTop"></tbody>
 	<tbody id="tbodyBottom">
+	<tr>
 	<td colspan="2"><button type="button" id="load_default_texts" disabled>⬑ Load sample data...</button></td>
+	</tr>
 	<tr>
 	<td class="label"><label for="width">Size</label></td><td><input id="width" type="number" min="1" step="1">&nbsp;<strong>✕</strong>&nbsp;<input id="height" type="number" min="1" step="1">&nbsp;<button type="button" id="set_original_size"></button></td>
 	</tr>
@@ -40,14 +45,16 @@ Product for personal use and may not be resold or redistributed under any circum
 		<option value="png">PNG</option>
 		<option value="jpeg">JPEG</option>
 	</select>
-	<button type="button" id="download_image" class="enabled_button"><strong>▼ DOWNLOAD IMAGE</strong></button>
 	</td>
+	</tr>
+	<tr>
+	<td colspan="2"><div class="separator"></div></td>
+	</tr>
+	<tr>
+	<td colspan="2"><input id="saveSettingsCheckbox" type="checkbox"><label for="saveSettingsCheckbox">Save settings on this computer</label><button type="button" id="download_image" class="enabled_button"><strong>DOWNLOAD</strong></button></td>
 	</tr>
 	</tbody>
 	</table>
-</body>
-<!-- ---------------------------------------------------[ HEADER END   ]--------------------------------------------------- -->
-<!--{--><script src="custom.js"></script><!--}-->
 <script>
 
 /*
@@ -60,5 +67,6 @@ makeContext - function(imgs, bgImg, o)
 
 start(images, fonts, bgImageName, sampleTexts, title, makeContext);
 </script>
+</body>
 
 
